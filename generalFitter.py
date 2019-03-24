@@ -75,13 +75,14 @@ def offdiag(matrix):
 	return offdiagElem
 #<CHANGE THIS________________________________________________________________________>
 def fittedFunc(x, a,b):
-	# yCalc = a*x+b
-	yCalc = (a+b*sqrt(x))/x
+	yCalc = a*x+b
+	# yCalc = (a+b*sqrt(x))/x
 	return yCalc
 equation="a*x+b"
 guess = [1,1]
-title = "Log log plot of efficiencyfit"
-#title = input("Please input the title(press enter to dismiss): ")
+# title = "Log log plot of efficiency fit"
+title = input("Please input the title(press enter to dismiss): ")
+if title=="": title="Fit"
 #</CHANGE THIS_______________________________________________________________________>
 numParam = len(guess)
 popt, pcov = curve_fit(fittedFunc, x, y, sigma=dy, p0=guess,absolute_sigma=True, check_finite=True)
