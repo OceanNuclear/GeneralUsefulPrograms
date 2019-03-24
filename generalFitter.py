@@ -2,14 +2,12 @@
 from numpy import cos,log10, arccos, sin, arctan, tan, pi, sqrt; from numpy import array as ary; import numpy as np; tau = 2*pi
 from matplotlib import pyplot as plt
 from scipy.optimize import curve_fit
+from numpy import log as ln
 #file reading part
 inFile = str(input("Please type in the input filename (without .txt):\n"))
 inFile += str(".txt")
 numLines = sum(1 for line in open(inFile))
 x = []
-global y,dy#share this so that it can be normalized
-global A
-A=0
 y = []
 dy= []
 f = open(inFile, "r")
@@ -45,19 +43,6 @@ def variablePFunction(func,xdata,popt):
 		return func(xdata,popt[0],popt[1],popt[2],popt[3])
 	else:
 		raise ValueError("Bruh there's too many variables in the model, are you sure you want to do that?")
-def normalize(fit):
-	global A
-	if len(fit)/len(dy)==1:
-		A = np.sum(y*fit/(dy**2))/np.sum(fit**2/(dy**2))
-	elif (len(fit)/len(dy)>8):
-		A= A
-	else:
-		print("Resolution is less than 8 times the actual data.")
-		return
-	return A*fit
-def getNormConst():
-	print("normalization constant=",A)
-	return A
 def s(num):#turning a floating point number into a reader-friendly format
 	assert isinstance(num,float)
 	if 1<=log10(abs(num))<3:
@@ -90,11 +75,12 @@ def offdiag(matrix):
 	return offdiagElem
 #<CHANGE THIS________________________________________________________________________>
 def fittedFunc(x, a,b):
-	yCalc = (1+a*x)*np.exp(-b*x)
-	return normalize(yCalc)
-equation="(1+a*x)*np.exp(-b*x)"
-guess = [1,2]
-title = "polynomial*exp fit"
+	# yCalc = a*x+b
+	yCalc = (a+b*sqrt(x))/x
+	return yCalc
+equation="a*x+b"
+guess = [1,1]
+title = "Log log plot of efficiencyfit"
 #title = input("Please input the title(press enter to dismiss): ")
 #</CHANGE THIS_______________________________________________________________________>
 numParam = len(guess)
@@ -122,11 +108,12 @@ if len(title)==0:
 	ax1.set_title("Custom function fitting using scipy")
 else:
 	ax1.set_title(title)
-ax1.errorbar(x, y, yerr = dy,ecolor="black",fmt ='o',color="orange",capsize=5,label="data")
+ax1.errorbar(x, y, yerr = dy,ecolor="black",fmt ='o',color="orange",capsize=5,)
 ax1.plot(x_smooth,y_smooth,label=equation,)
 ax2.set_title("Residuals")
-ax2.errorbar(x,residual,yerr=dy,capsize=4)
+ax2.errorbar(x,residual,yerr=dy,capsize=4,linestyle="",)
 ax1.legend()
+ax1.set_ylabel("R(E)")
+ax2.set_xlabel("Energy (keV)")
 ax2.axhline(color="black")
-getNormConst()
 plt.show()
