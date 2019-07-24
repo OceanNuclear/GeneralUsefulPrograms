@@ -1,0 +1,15 @@
+{
+hidden_layer:[12,"64.34",192],
+session_name : "_sqeeze",
+}
+
+{
+loss_func : "mean_squared_logarithmic_error",
+hidden_layer : [192,32,192],
+session_name : "_squeeze_tight",
+}
+{
+loss_func : "mean_squared_logarithmic_error",
+hidden_layer : [256,256]
+session_name : "_big"
+}
