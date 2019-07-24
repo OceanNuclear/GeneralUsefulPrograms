@@ -75,14 +75,16 @@ def offdiag(matrix):
 	return offdiagElem
 #<CHANGE THIS________________________________________________________________________>
 def fittedFunc(x, a,b):
-	yCalc = a*x+b
-	# yCalc = (a+b*sqrt(x))/x
+	# yCalc = a*x**b
+	yCalc = sqrt(a+b*(x))/x
+	# yCalc = a+b*x
 	return yCalc
-equation="a*x+b"
-guess = [1,1]
-# title = "Log log plot of efficiency fit"
+# equation="(a+b*sqrt(x))/x"
+equation = "sqrt(a+b*(x))/x"
+guess = [1,6]
+# title = "Centroid of the 1.3MeV peak of Co-60 wrt. applied voltage"
 title = input("Please input the title(press enter to dismiss): ")
-if title=="": title="Fit"
+if title=="": title="Resolution Fit"
 #</CHANGE THIS_______________________________________________________________________>
 numParam = len(guess)
 popt, pcov = curve_fit(fittedFunc, x, y, sigma=dy, p0=guess,absolute_sigma=True, check_finite=True)
@@ -114,7 +116,8 @@ ax1.plot(x_smooth,y_smooth,label=equation,)
 ax2.set_title("Residuals")
 ax2.errorbar(x,residual,yerr=dy,capsize=4,linestyle="",)
 ax1.legend()
-ax1.set_ylabel(r"log $\epsilon_{peak} \left(\frac{\Omega}{4\pi}\right) =\epsilon_{abs} \mathbf{\frac{\epsilon_{peak}}{\epsilon_{intr}}} = \epsilon_{abs}r$")
-ax2.set_xlabel("log Energy/keV")
+ax2.set_xlabel(r"E(keV)")
+ax2.set_ylabel(r"R(E)")
+# ax1.set_ylabel(r"log($\epsilon_{peak}(\frac{\Omega}{4\pi})=\epsilon_{abs}r$)")
 ax2.axhline(color="black")
 plt.show()
