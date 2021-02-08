@@ -3,6 +3,13 @@ import datetime, os, json
 JSON_FILENAME = "index.json"
 # import fcntl
 
+"""
+Module useful for saving (hyper)parameters used for long runs/simulations.
+
+Example use case that I've encountered include
+    saving the hyperparameters in neuralnetwork training,
+    or the repulsion coefficients used in FEM.
+"""
 class HashSaver(contextlib.ContextDecorator):
     def __init__(self, trim_length=10):
         self.time = datetime.datetime.now()
@@ -60,7 +67,10 @@ class NumpyEncoder(json.JSONEncoder):
         else:
             return super().default(o)
 
-class ExampleClassSaver(HashSaver):
+class BaseParameterSaver(HashSaver):
+    """
+    A basic parameter saver that can be used by with BaseParameterSaver(data_to_be_saved) as f: f.save().
+    """
     def __init__(self, parameters, trim_length=10, encoder=NumpyEncoder):
         super().__init__(trim_length)
         self.parameters = parameters
@@ -86,5 +96,6 @@ class ExampleClassSaver(HashSaver):
         self.saved = True
 
 if __name__=='__main__':
-    with ExampleClassSaver({"parameters" : np.empty(3)}, 16) as example_parameters:
+    with BaseParameterSaver({"random_array" : np.empty(3)}, 16) as example_parameters:
+        np.save(example_parameters.hash_name+".npy", np.empty(3), allow_pickle=False)
         example_parameters.save()
