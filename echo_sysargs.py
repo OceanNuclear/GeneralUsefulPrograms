@@ -1,5 +1,7 @@
-#!/home/ocean/anaconda3/bin/python3
+"""Pretend I have docstring"""
 import sys
-import os
+# import os
+from pprint import pprint
+
 if __name__=="__main__":
-    print(sys.argv[1:])
+    pprint(sys.argv[1:])
