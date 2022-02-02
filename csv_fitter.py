@@ -1,3 +1,5 @@
+"""Choose 2 columns from a csv and then fit it."""
+"""optional: TODO: extend it so that it provides the option of fitting with vertical error bars -> print chi2?"""
 def read_df(filename=None):
     import sys
     import pandas as pd
@@ -37,9 +39,11 @@ def fit_interactively_and_show(dataframe, x, y, w=None, PLOTLY=True):
     expression_str = "y =" + " + ".join([f"{c} * x^{i}" for i, c in enumerate(p[::-1])])
     print("i.e.", expression_str)
 
+    # calculate the residuals
     fit_equation = np.poly1d(p)
     yfit = fit_equation(dataframe[x])
     residuals = dataframe[y] - yfit
+    print("Sum of squares of residuals:", sum(i**2 for i in residuals)) # chi2 equivalent when assuming y_err = 1 for every data point
 
     if PLOTLY:
         import plotly.express as px
@@ -50,10 +54,18 @@ def fit_interactively_and_show(dataframe, x, y, w=None, PLOTLY=True):
 
     else:
         import matplotlib.pyplot as plt
+        # plot the actual fit
+        plt.title("Fitted polynomial")
+        smoothed_x = np.linspace(dataframe[x].min(), dataframe[x].max(), 1000)
+        smoothed_y = fit_equation(smoothed_x)
+        plt.plot(smoothed_x, smoothed_y)
+        plt.scatter(dataframe[x].values, dataframe[y].values, marker='x', color='black')
+        plt.xlabel(x); plt.ylabel(y)
+        plt.show()
+        # plot the residuals
         deviation_bars = np.vstack([residuals, np.zeros_like(yfit)])
         plt.title("Residual plot")
-        plt.xlabel(x)
-        plt.ylabel(y)
+        plt.xlabel(x); plt.ylabel(y)
         plt.plot([min(dataframe[x]), max(dataframe[x])], [0, 0], color='black') # plot the y=0 trend line.
         plt.plot(np.vstack([dataframe[x], dataframe[x]]), deviation_bars, color="C0")
         plt.scatter(dataframe[x], residuals, marker='x', color='black')
