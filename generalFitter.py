@@ -4,8 +4,8 @@ from matplotlib import pyplot as plt
 from scipy.optimize import curve_fit
 from numpy import log as ln
 #file reading part
-inFile = str(input("Please type in the input filename (without .txt):\n"))
-inFile += str(".txt")
+inFile = str(input("Please type in the input filename:\n"))
+
 numLines = sum(1 for line in open(inFile))
 x = []
 y = []
