@@ -53,12 +53,18 @@ parg.add_argument("-v", "--verbosity-increase", dest="verbosity", help="Increase
 parg.add_argument('-j', '--jnp', action='append', nargs='*', help="Example with multiple arguments, repeatable.")
     # python __main.py__ -j a list of words -j another list
     # gives cl_arg.jnp == [['a', 'list', 'of', 'words'], ['another', 'list']]
+# the alternative to '*' (requiring 0+ arguments) is '+' (requiring 1+ arguments).
 
-# case 6: taking in multiple arguments, but each with fixed lengths and nice names:
+# case 6: taking in multiple arguments, but each with fixed lengths and nice names, into a 2D array.
 parg.add_argument('-i', '--inp', action='append', nargs=2, metavar=('url','name'), help="Example with 2 arguments.")
     # the metavar is simply used to fill out the names in the help documentation.
 
-# case 7: a variable with default True, toggled to False. TAKES NO ARGUMENT.
+# case 7: Taking in multiple arguments, into a 1D array
+parg.add_argument('-n', '--numbers', action='extend', nargs='+', type=int, help="A list of ints.")
+    # python __main__.py -n 1 2 -n 3
+        # cl_arg.numbers == [1, 2, 3]
+
+# case 8: a variable with default True, toggled to False. TAKES NO ARGUMENT.
 parg.add_argument('--default-true', action='store_const', const=False, default=True)
     # const: if flag is present, what value it will take.
     # default: if flag is present but doesn't have an argument, what value it takes
@@ -69,7 +75,7 @@ parg.add_argument('--default-true', action='store_const', const=False, default=T
     # python __main__.py --default-true anywordatall
         # Error 
 
-# case 8: a variable with no deafult (None). toggled to True if used. TAKES NO ARGUMENT.
+# case 9: a variable with no deafult (None). toggled to True if used. TAKES NO ARGUMENT.
 parg.add_argument('--default-none', action='store_const', const=True)
     # python __main__.py --default-true
         # cl_arg.default_none == False
@@ -95,4 +101,4 @@ if __name__=="__main__":
     if cl_arg.verbosity: # doesn't get printed of verbosity level = 0
         print(f"verbosity level = {cl_arg.verbosity}")
         if cl_arg.verbosity >1:
-        print("(The attributes of cl_arg are automatically sorted alphabetically, and listed above.)")
+            print("(The attributes of cl_arg are automatically sorted alphabetically, and listed above.)")
