@@ -26,7 +26,7 @@ if __name__=="__main__":
                 output += line[:-2]
             elif line[-2:] == ".\n": # actual end of line which just happens to be exactly this wide.
                 output += line
-                output + "\n"
+                output += "\n"
             else: # full line, incomplete sentence.
                 output += line.rstrip("\n") + " "
 
