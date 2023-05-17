@@ -43,7 +43,7 @@ def decorator(func_you_want_decorated):
         #func_after_decoration's return will replace the func_you_want_decorated's return
         return new_output+" and some text added at the new 'return' line"
 
-    print('OUTSIDE: decorator has been applied onto', func_after_decoration.__name__)
+    print('OUTSIDE: after decorator has been applied onto', func_after_decoration.__name__)
     
     #usually we make it return the new func_after_decoration function object
     return func_after_decoration
@@ -54,23 +54,26 @@ def func_aliased_away(args):
     print(args)
     return str(args)+"original text"
 var_out="This variable is initialized outside"
-def core_func(args):
+def wrapped_func(args):
     print(var_out)
     new_args = args +1
     
-    print('INSIDE: decorator has (not) been applied onto', core_func.__name__)
+    print('INSIDE: decorator has (not) been applied onto', wrapped_func.__name__)
 
     output_from_orig_func = func_aliased_away(new_args)
     new_output = output_from_orig_func+","
     
     return new_output+" and some text added at the new 'return' line "
-print('OUTSIDE: decorator has (not) been applied onto', func_aliased_away.__name__)
+print('OUTSIDE: before decorator has been applied onto', func_aliased_away.__name__)
 ########################
 # can be simplified as #
 ########################
-@decorator
 #
-def core_func(args):
+@decorator
+def wrapped_func(args):
     print(args)
     return str(args)+"original text"
 #
+# So using the @ unary operator,
+# we begin the scope of the 'decorator' function as if we've called it with 
+# wrapped_func = decorator(wrapped_func)
