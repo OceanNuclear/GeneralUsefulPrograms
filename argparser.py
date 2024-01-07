@@ -66,8 +66,8 @@ parg.add_argument('-n', '--numbers', action='extend', nargs='+', type=int, help=
 
 # case 8: a variable with default True, toggled to False. TAKES NO ARGUMENT.
 parg.add_argument('--default-true', action='store_const', const=False, default=True)
-    # const: if flag is present, what value it will take.
-    # default: if flag is present but doesn't have an argument, what value it takes
+    # const: if flag is present, what value will it take.
+    # default: if flag is absent, what value will it take.
     # python __main__.py --default-true
         # cl_arg.default_true == False
     # python __main__.py
