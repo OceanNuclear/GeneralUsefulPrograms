@@ -38,7 +38,7 @@ parg.add_argument("-S", help="a boolean flag with no short form", action="store_
     # can be accessed by parg.parse_args().S
 
 # case 3: a flag with only a short form, taking in a str argument.
-parg.add_argument("-A", help="Enter ONE test argument.",)
+parg.add_argument("-A", help="Enter ONE and only ONE test argument if this flag is used.",)
     # python __main__.py -A 1 -A 2 # would give cl_arg.parse_args().A==2,
     # because the first A's value gets overwritten because extend isn't used.
 
